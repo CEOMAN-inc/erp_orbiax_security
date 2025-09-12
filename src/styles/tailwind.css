@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Core Colors */
+    --color-background: #0f172a; /* slate-900 */
+    --color-foreground: #e2e8f0; /* slate-200 */
+    --color-border: #334155; /* slate-700 */
+    --color-input: #1e293b; /* slate-800 */
+    --color-ring: #7c3aed; /* violet-600 */
+    
+    /* Card Colors */
+    --color-card: #1e293b; /* slate-800 */
+    --color-card-foreground: #e2e8f0; /* slate-200 */
+    
+    /* Popover Colors */
+    --color-popover: #1e293b; /* slate-800 */
+    --color-popover-foreground: #e2e8f0; /* slate-200 */
+    
+    /* Muted Colors */
+    --color-muted: #334155; /* slate-700 */
+    --color-muted-foreground: #94a3b8; /* slate-400 */
+    
+    /* Primary Colors */
+    --color-primary: #7c3aed; /* violet-600 */
+    --color-primary-foreground: #ffffff; /* white */
+    
+    /* Secondary Colors */
+    --color-secondary: #0ea5e9; /* sky-500 */
+    --color-secondary-foreground: #ffffff; /* white */
+    
+    /* Accent Colors */
+    --color-accent: #ec4899; /* pink-500 */
+    --color-accent-foreground: #ffffff; /* white */
+    
+    /* Success Colors */
+    --color-success: #10b981; /* emerald-500 */
+    --color-success-foreground: #ffffff; /* white */
+    
+    /* Warning Colors */
+    --color-warning: #f59e0b; /* amber-500 */
+    --color-warning-foreground: #ffffff; /* white */
+    
+    /* Error/Destructive Colors */
+    --color-error: #ef4444; /* red-500 */
+    --color-error-foreground: #ffffff; /* white */
+    --color-destructive: #ef4444; /* red-500 */
+    --color-destructive-foreground: #ffffff; /* white */
+    
+    /* Gradient Colors */
+    --color-gradient-from: #7c3aed; /* violet-600 */
+    --color-gradient-to: #0ea5e9; /* sky-500 */
+    
+    /* Surface Colors */
+    --color-surface: #1e293b; /* slate-800 */
+    --color-surface-foreground: #e2e8f0; /* slate-200 */
+    
+    /* Text Colors */
+    --color-text-primary: #e2e8f0; /* slate-200 */
+    --color-text-secondary: #94a3b8; /* slate-400 */
+    
+    /* Border Radius */
+    --radius: 0.5rem;
+  }
+  
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Inter', sans-serif;
+  }
+  
+  .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+@layer components {
+  .gradient-bg {
+    background: linear-gradient(135deg, var(--color-gradient-from) 0%, var(--color-gradient-to) 100%);
+  }
+  
+  .command-center-shadow {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  }
+  
+  .micro-interaction {
+    transition: all 150ms ease-out;
+  }
+  
+  .micro-interaction:hover {
+    transform: translateY(-2px);
+  }
+  
+  .progressive-disclosure {
+    transition: height 300ms ease-out;
+  }
+  
+  .shimmer {
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    animation: shimmer 1.5s infinite;
+  }
+  
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  
+  .slide-in {
+    animation: slideIn 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  .backdrop-blur-command {
+    backdrop-filter: blur(8px);
+  }
+}
