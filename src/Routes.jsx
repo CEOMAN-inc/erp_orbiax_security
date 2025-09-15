@@ -9,6 +9,9 @@ import AssetManagement from './pages/asset-management';
 import IncidentReporting from './pages/incident-reporting';
 import PersonnelManagement from './pages/personnel-management';
 import ServiceOrdersPage from './pages/service-orders';
+import AIChatPage from './pages/ai-chat';
+import AIPredictionsPage from './pages/ai-predictions'; // <-- AÑADE ESTA LÍNEA
+
 
 const Routes = () => {
   return (
@@ -24,6 +27,8 @@ const Routes = () => {
         <Route path="/incident-reporting" element={<IncidentReporting />} />
         <Route path="/personnel-management" element={<PersonnelManagement />} />
         <Route path="/service-orders" element={<ServiceOrdersPage />} />
+        <Route path="/ai-chat" element={<AIChatPage />} />
+        <Route path="/ai-predictions" element={<AIPredictionsPage />} /> 
         <Route path="*" element={<NotFound />} />
       </RouterRoutes>
       </ErrorBoundary>
