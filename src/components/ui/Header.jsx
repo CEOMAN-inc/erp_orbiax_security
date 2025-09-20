@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Icon from '../AppIcon';
 import Button from './Button';
+import { useAuth } from '../../hooks/useAuth'; // <-- AÑADIDO
 
 const Header = ({ 
   isCollapsed = false, 
@@ -11,6 +12,7 @@ const Header = ({
   onNotificationClick,
   user = { name: "Admin User", avatar: null }
 }) => {
+  const { logout } = useAuth(); // <-- AÑADIDO
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isTenantDropdownOpen, setIsTenantDropdownOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
@@ -217,7 +219,10 @@ const Header = ({
                     <span>Help</span>
                   </button>
                   <div className="border-t border-border my-1" />
-                  <button className="w-full flex items-center space-x-2 px-3 py-2 rounded-md text-sm hover:bg-muted transition-colors text-error">
+                  <button 
+                    onClick={logout}
+                    className="w-full flex items-center space-x-2 px-3 py-2 rounded-md text-sm hover:bg-muted transition-colors text-error"
+                  >
                     <Icon name="LogOut" size={16} />
                     <span>Sign out</span>
                   </button>

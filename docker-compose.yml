@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  # --- Servicio del Frontend (React + Nginx) ---
+  frontend:
+    build: .
+    container_name: orbiax-frontend
+    ports:
+      # Expone tu app de React en el puerto 4028 de tu máquina
+      - "4028:80"
+    restart: unless-stopped
+
+  # --- Servicio del Backend (Tu API) ---
+  backend:
+    # IMPORTANTE: Reemplaza 'nombre-de-tu-imagen-backend:latest'
+    # con el nombre real de la imagen de tu backend.
+    image: nombre-de-tu-imagen-backend:latest
+    container_name: orbiax-backend
+    ports:
+      # Expone tu API en el puerto 8000, como en Postman
+      - "8000:8000"
+    restart: unless-stopped
+    # Si tu backend necesita variables de entorno, agrégalas aquí.
+    # environment:
+    #   - DATABASE_URL=...
+    #   - SECRET_KEY=...
