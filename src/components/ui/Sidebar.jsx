@@ -94,7 +94,14 @@ const Sidebar = ({ isCollapsed = false, onToggle }) => {
           { id: 'chat-interno', label: 'Chat Interno', icon: 'Bot', path: '/ai-chat' },
           { id: 'predicciones', label: 'Predicciones', icon: 'TrendingUp', path: '/ai-predictions' }
         ]
-      }
+    },
+    {
+      id: 'configuracion',
+      label: 'Configuración',
+      icon: 'Settings',
+      path: '/system-configuration',
+      type: 'single'
+    }
   ], []);
 
   useEffect(() => {

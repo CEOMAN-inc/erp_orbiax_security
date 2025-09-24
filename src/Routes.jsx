@@ -10,7 +10,6 @@ import AuthLayout from "pages/auth/AuthLayout";
 import NotFound from "pages/NotFound";
 import CompanyLookup from "pages/auth/CompanyLookup";
 import LoginPage from "pages/auth/Login";
-import SignUpPage from "pages/auth/SignUp";
 import Dashboard from './pages/dashboard';
 import AssetManagement from './pages/asset-management';
 // La siguiente línea es la que corregimos
@@ -20,6 +19,7 @@ import ServiceOrdersPage from './pages/service-orders';
 import RosterCalendar from './pages/roster-calendar';
 import AIChatPage from './pages/ai-chat';
 import AIPredictionsPage from './pages/ai-predictions';
+import SystemConfigurationPage from './pages/system-configuration';
 
 const Routes = () => {
   return (
@@ -29,7 +29,6 @@ const Routes = () => {
         <Route element={<AuthLayout />}>
           <Route path="/" element={<CompanyLookup />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignUpPage />} />
         </Route>
         
         {/* Rutas Privadas del ERP */}
@@ -42,7 +41,8 @@ const Routes = () => {
           <Route path="/roster-calendar" element={<RosterCalendar />} />
           <Route path="/ai-chat" element={<AIChatPage />} />
           <Route path="/ai-predictions" element={<AIPredictionsPage />} />
-          {/* Aquí irán las futuras rutas protegidas como /contracts, /attendance, etc. */}
+          <Route path="/system-configuration" element={<SystemConfigurationPage />} />
+          {/* Aquí irán las futuras rutas protegidas como*/}
         </Route>
 
         <Route path="*" element={<NotFound />} />
