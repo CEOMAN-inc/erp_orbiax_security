@@ -1,9 +1,7 @@
 import React from 'react';
 import Icon from '../../../components/AppIcon';
-import { useNavigate } from 'react-router-dom';
 
-const ChatMessage = ({ message, isUser, timestamp }) => {
-  const navigate = useNavigate();
+const ChatMessage = ({ message, isUser, timestamp, onActionClick }) => {
 
   const formatTime = (date) => {
     return new Intl.DateTimeFormat('es-CO', {
@@ -12,29 +10,20 @@ const ChatMessage = ({ message, isUser, timestamp }) => {
     }).format(date);
   };
 
-  const handleActionClick = (action) => {
-    if (action.route) {
-      navigate(action.route);
-    } else {
-      // Aquí puedes manejar acciones personalizadas que no son de navegación
-      alert(`Acción "${action.label}" ejecutada.`);
-    }
-  };
-
   if (isUser) {
     return (
-      <div className="flex justify-end mb-6 animate-slideIn">
-        <div className="flex items-start space-x-3 max-w-2xl">
-          <div className="bg-primary text-primary-foreground rounded-2xl rounded-tr-none px-4 py-3 shadow-md">
-            <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-            <p className="text-xs opacity-70 mt-1 text-right">{formatTime(timestamp)}</p>
-          </div>
-          <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
-            <Icon name="User" size={20} className="text-foreground" />
+        <div className="flex justify-end mb-6 animate-slideIn">
+          <div className="flex items-start space-x-3 max-w-2xl">
+            <div className="bg-primary text-primary-foreground rounded-2xl rounded-tr-none px-4 py-3 shadow-md">
+              <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+              <p className="text-xs opacity-70 mt-1 text-right">{formatTime(timestamp)}</p>
+            </div>
+            <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
+              <Icon name="User" size={20} className="text-foreground" />
+            </div>
           </div>
         </div>
-      </div>
-    );
+      );
   }
 
   return (
@@ -49,54 +38,52 @@ const ChatMessage = ({ message, isUser, timestamp }) => {
             <p className="text-xs text-muted-foreground mt-1">{formatTime(timestamp)}</p>
           </div>
           
-          {message.actionCards && message.actionCards.length > 0 && (
-            <div className="space-y-3">
-              {message.actionCards.map((card, index) => (
-                <div key={index} className="bg-muted/50 border border-border rounded-xl p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <h4 className="text-sm font-semibold text-foreground">{card.title}</h4>
-                    <Icon name={card.icon} size={16} className="text-primary" />
-                  </div>
-                  
-                  {card.type === 'metric' && (
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
-                      {card.metrics.map((metric, idx) => (
-                        <div key={idx} className="text-center">
-                          <p className="text-xl font-bold text-primary">{metric.value}</p>
-                          <p className="text-xs text-muted-foreground">{metric.label}</p>
-                        </div>
-                      ))}
+          {message.actionCards && message.actionCards.map((card, index) => (
+            <div key={index} className="bg-muted/50 border border-border rounded-xl p-4">
+              <div className="flex items-center justify-between mb-3">
+                <h4 className="text-sm font-semibold text-foreground">{card.title}</h4>
+                <Icon name={card.icon} size={16} className="text-primary" />
+              </div>
+              
+              {/* --- CÓDIGO CORREGIDO AQUÍ --- */}
+              {card.type === 'metric' && (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
+                  {card.metrics.map((metric, idx) => (
+                    <div key={idx} className="text-center">
+                      <p className="text-xl font-bold text-primary">{metric.value}</p>
+                      <p className="text-xs text-muted-foreground">{metric.label}</p>
                     </div>
-                  )}
-                  
-                  {card.type === 'list' && (
-                    <div className="space-y-2 mb-3">
-                      {card.items.map((item, idx) => (
-                        <div key={idx} className="flex items-center justify-between py-1 border-b border-border/50 last:border-b-0">
-                          <span className="text-sm text-foreground">{item.name}</span>
-                          <span className="text-sm text-muted-foreground font-medium">{item.value}</span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  
-                  {card.actions && card.actions.length > 0 && (
-                    <div className="flex flex-wrap gap-2">
-                      {card.actions.map((action, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => handleActionClick(action)}
-                          className="px-3 py-1 text-xs bg-primary/10 text-primary rounded-full hover:bg-primary/20 transition-colors duration-200"
-                        >
-                          {action.label}
-                        </button>
-                      ))}
-                    </div>
-                  )}
+                  ))}
                 </div>
-              ))}
+              )}
+              
+              {card.type === 'list' && (
+                <div className="space-y-2 mb-3">
+                  {card.items.map((item, idx) => (
+                    <div key={idx} className="flex items-center justify-between py-1 border-b border-border/50 last:border-b-0">
+                      <span className="text-sm text-foreground">{item.name}</span>
+                      <span className="text-sm text-muted-foreground font-medium">{item.value}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {/* --- FIN DE LA CORRECCIÓN --- */}
+              
+              {card.actions && card.actions.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {card.actions.map((action, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => onActionClick(action)}
+                      className="px-3 py-1 text-xs bg-primary/10 text-primary rounded-full hover:bg-primary/20 transition-colors duration-200"
+                    >
+                      {action.label}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
-          )}
+          ))}
         </div>
       </div>
     </div>

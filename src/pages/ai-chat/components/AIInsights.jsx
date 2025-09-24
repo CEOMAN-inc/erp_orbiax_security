@@ -1,9 +1,9 @@
 import React from 'react';
 import Icon from '../../../components/AppIcon';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom'; // Se elimina la importación
 
-const AIInsights = ({ insights }) => {
-  const navigate = useNavigate();
+const AIInsights = ({ insights, onActionClick }) => {
+  // const navigate = useNavigate(); // Se elimina el uso de useNavigate
 
   const getInsightIcon = (type) => ({
     warning: 'AlertTriangle', success: 'CheckCircle', info: 'Info', trend: 'TrendingUp', alert: 'Bell'
@@ -14,11 +14,6 @@ const AIInsights = ({ insights }) => {
   }[type] || 'text-primary');
 
   if (!insights || insights.length === 0) return null;
-  
-  const handleActionClick = (action) => {
-    if (action.route) navigate(action.route);
-    else alert(`Acción "${action.label}" ejecutada.`);
-  };
 
   return (
     <div className="bg-card border border-border rounded-xl">
@@ -39,7 +34,7 @@ const AIInsights = ({ insights }) => {
                 {insight.actions.map((action, idx) => (
                   <button
                     key={idx}
-                    onClick={() => handleActionClick(action)}
+                    onClick={() => onActionClick(action)} // <-- Llama a la propiedad del padre
                     className="px-2 py-1 text-xs bg-primary/10 text-primary rounded-full hover:bg-primary/20 transition-colors"
                   >
                     {action.label}
