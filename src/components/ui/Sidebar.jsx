@@ -53,15 +53,16 @@ const Sidebar = ({ isCollapsed = false, onToggle }) => {
         { id: 'inspecciones', label: 'Inspecciones y Mantenimiento', icon: 'Wrench', path: '/inspections' }
       ]
     },
-    {
+     {
       id: 'contratos-facturacion',
       label: 'Contratos y Facturación',
       icon: 'FileText',
       type: 'group',
       items: [
-        { id: 'registrar-contratos', label: 'Registrar Contratos', icon: 'FilePlus', path: '/contracts' },
-        { id: 'seguimiento-pagos', label: 'Seguimiento de Pagos', icon: 'DollarSign', path: '/payment-tracking' },
-        { id: 'reportes-cartera', label: 'Reportes de Cartera', icon: 'PieChart', path: '/portfolio-reports' }
+        { id: 'gestion-contratos', label: 'Gestión de Contratos', icon: 'FilePlus', path: '/contracts' },
+        { id: 'seguimiento-pagos', label: 'Seguimiento de Pagos', icon: 'DollarSign', path: '/payments' },
+        { id: 'reportes-cartera', label: 'Reportes de Cartera', icon: 'PieChart', path: '/reports/portfolio' },
+        { id: 'renovaciones', label: 'Renovaciones', icon: 'RefreshCw', path: '/contracts/renewals' }
       ]
     },
     {
