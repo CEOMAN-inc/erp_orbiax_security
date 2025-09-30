@@ -66,14 +66,19 @@ const Sidebar = ({ isCollapsed = false, onToggle }) => {
       ]
     },
     {
+      // --- SECCIÓN DE CONTABILIDAD ACTUALIZADA ---
       id: 'contabilidad-finanzas',
       label: 'Contabilidad y Finanzas',
       icon: 'Landmark',
       type: 'group',
       items: [
-        { id: 'libro-mayor', label: 'Libro Mayor', icon: 'BookOpen', path: '/general-ledger' },
-        { id: 'balances-informes', label: 'Balances e Informes', icon: 'Clipboard', path: '/financial-statements' },
-        { id: 'presupuestos', label: 'Control de Presupuestos', icon: 'Target', path: '/budgets' }
+        { id: 'general-ledger', label: 'Libro Mayor', icon: 'BookOpen', path: '/general-ledger' },
+        { id: 'accounts-payable', label: 'Cuentas por Pagar', icon: 'ArrowDownCircle', path: '/accounts-payable' },
+        { id: 'accounts-receivable', label: 'Cuentas por Cobrar', icon: 'ArrowUpCircle', path: '/accounts-receivable' },
+        { id: 'cash-management', label: 'Tesorería', icon: 'Wallet', path: '/cash-management' },
+        { id: 'fixed-assets', label: 'Activos Fijos', icon: 'Building', path: '/fixed-assets' },
+        { id: 'budgets', label: 'Presupuestos', icon: 'Target', path: '/budgets' },
+        { id: 'financial-reports', label: 'Informes Financieros', icon: 'PieChart', path: '/financial-reports' }
       ]
     },
     {

@@ -1,47 +1,66 @@
 import React from "react";
 import { Routes as RouterRoutes, Route } from "react-router-dom";
 
-// Componentes de Página
+// --- Componentes de Página Principales ---
 import NotFound from "pages/NotFound";
-import Dashboard from "./pages/dashboard";
-import AssetManagement from "./pages/asset-management";
-import IncidentReporting from "./pages/incident-reporting";
-import PersonnelManagement from "./pages/personnel-management";
-import ServiceOrdersPage from "./pages/service-orders";
-import RosterCalendar from "./pages/roster-calendar";
-import AIChatPage from "./pages/ai-chat";
-import AIPredictionsPage from "./pages/ai-predictions";
-import SystemConfigurationPage from "./pages/system-configuration";
-import ContractsPage from "./pages/contracts-and-billing/components/ContractsTab";
-import PaymentsPage from "./pages/contracts-and-billing/components/PaymentsTab";
+import Dashboard from "pages/dashboard";
+import AssetManagement from "pages/asset-management";
+import IncidentReporting from "pages/incident-reporting";
+import PersonnelManagement from "pages/personnel-management";
+import ServiceOrdersPage from "pages/service-orders";
+import RosterCalendar from "pages/roster-calendar";
+import AIChatPage from "pages/ai-chat";
+import AIPredictionsPage from "pages/ai-predictions";
+import SystemConfigurationPage from "pages/system-configuration";
 
-const RenewalsPage = () => (
-  <div className="p-6">
-    <h1 className="text-3xl font-bold">Renovaciones de Contratos</h1>
-    <p className="mt-2">Próximamente: Vista para gestionar contratos por renovar.</p>
-  </div>
-);
+// --- Componentes del Módulo de Contratos y Facturación ---
+import ContractsAndBillingPage from "pages/contracts-and-billing";
+import RenewalsTab from "pages/contracts-and-billing/components/RenewalsTab";
+import PaymentsTab from "pages/contracts-and-billing/components/PaymentsTab";
+import PortfolioReportTab from "pages/contracts-and-billing/components/PortfolioReportTab";
+
+// --- IMPORTA EL CONTENEDOR PRINCIPAL DE CONTABILIDAD ---
+import AccountingAndFinancePage from "pages/accounting-and-finance";
+
 
 const Routes = () => {
   return (
     <RouterRoutes>
-      {/* Acceso directo al Dashboard y demás páginas sin login */}
+      {/* --- Rutas Generales y Dashboard --- */}
       <Route path="/" element={<Dashboard />} />
       <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/asset-management" element={<AssetManagement />} />
-      <Route path="/incident-reporting" element={<IncidentReporting />} />
+
+      {/* --- Rutas de Módulos ERP --- */}
       <Route path="/personnel-management" element={<PersonnelManagement />} />
-      <Route path="/service-orders" element={<ServiceOrdersPage />} />
       <Route path="/roster-calendar" element={<RosterCalendar />} />
+      <Route path="/service-orders" element={<ServiceOrdersPage />} />
+      <Route path="/incident-reporting" element={<IncidentReporting />} />
+      <Route path="/asset-management" element={<AssetManagement />} />
+      
+      {/* --- Rutas para Contratos y Facturación --- */}
+      <Route path="/contracts" element={<ContractsAndBillingPage />} />
+      <Route path="/payments" element={<PaymentsTab />} />
+      <Route path="/contracts/renewals" element={<RenewalsTab />} />
+      <Route path="/reports/portfolio" element={<PortfolioReportTab />} />
+
+      {/* --- Rutas de Contabilidad y Finanzas --- */}
+      {/* Todas apuntan al mismo componente contenedor */}
+      <Route path="/general-ledger" element={<AccountingAndFinancePage />} />
+      <Route path="/accounts-payable" element={<AccountingAndFinancePage />} />
+      <Route path="/accounts-receivable" element={<AccountingAndFinancePage />} />
+      <Route path="/cash-management" element={<AccountingAndFinancePage />} />
+      <Route path="/fixed-assets" element={<AccountingAndFinancePage />} />
+      <Route path="/budgets" element={<AccountingAndFinancePage />} />
+      <Route path="/financial-reports" element={<AccountingAndFinancePage />} />
+
+      {/* --- Rutas de Inteligencia Artificial --- */}
       <Route path="/ai-chat" element={<AIChatPage />} />
       <Route path="/ai-predictions" element={<AIPredictionsPage />} />
+
+      {/* --- Ruta de Configuración --- */}
       <Route path="/system-configuration" element={<SystemConfigurationPage />} />
-      {/* --- Rutas para Contratos y Facturación --- */}
-      <Route path="/contracts" element={<ContractsPage />} />
-      <Route path="/payments" element={<PaymentsPage />} />
-      <Route path="/contracts" element={<RenewalsPage />} />
       
-      {/* Fallback */}
+      {/* --- Ruta para Páginas No Encontradas (Fallback) --- */}
       <Route path="*" element={<NotFound />} />
     </RouterRoutes>
   );
