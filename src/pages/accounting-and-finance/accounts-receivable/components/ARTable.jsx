@@ -1,0 +1,67 @@
+import React from 'react';
+import Icon from 'components/AppIcon';
+import Button from 'components/ui/Button';
+
+const ARTable = ({ invoices, onViewDetails, onRegisterPayment, onEdit, onSend }) => {
+  const getStatusBadge = (status) => {
+    switch (status) {
+      case 'Pagada':
+        return 'bg-success/20 text-success';
+      case 'Emitida':
+        return 'bg-primary/20 text-primary';
+      case 'Vencida':
+        return 'bg-error/20 text-error';
+      default:
+        return 'bg-muted/20 text-muted-foreground';
+    }
+  };
+
+  return (
+    <div className="bg-card border border-border rounded-lg overflow-hidden mt-6">
+      <div className="overflow-x-auto">
+        <table className="w-full">
+          <thead className="bg-muted/50">
+            <tr>
+              <th className="p-4 text-left text-sm font-medium text-foreground">N° Factura</th>
+              <th className="p-4 text-left text-sm font-medium text-foreground">Cliente</th>
+              <th className="p-4 text-left text-sm font-medium text-foreground">Fecha Emisión</th>
+              <th className="p-4 text-left text-sm font-medium text-foreground">Fecha Vencimiento</th>
+              <th className="p-4 text-center text-sm font-medium text-foreground">Estado</th>
+              <th className="p-4 text-right text-sm font-medium text-foreground">Total</th>
+              <th className="p-4 text-right text-sm font-medium text-foreground">Saldo Pendiente</th>
+              <th className="p-4 text-center text-sm font-medium text-foreground">Acciones</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-border">
+            {invoices.map((inv) => (
+              <tr key={inv.id} className="hover:bg-muted/30">
+                <td className="p-4 text-sm text-muted-foreground font-mono">{inv.id}</td>
+                <td className="p-4 text-sm font-medium text-foreground">{inv.client}</td>
+                <td className="p-4 text-sm text-muted-foreground">{inv.issueDate}</td>
+                <td className="p-4 text-sm text-muted-foreground">{inv.dueDate}</td>
+                <td className="p-4 text-center">
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusBadge(inv.status)}`}>
+                    {inv.status}
+                  </span>
+                </td>
+                <td className="p-4 text-right text-sm font-mono">{inv.total.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}</td>
+                <td className="p-4 text-right text-sm font-mono font-semibold">{inv.balance.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}</td>
+                <td className="p-4">
+                  <div className="flex items-center justify-center space-x-1">
+                    <Button variant="ghost" size="icon" title="Ver Detalle" onClick={() => onViewDetails(inv)}><Icon name="Eye" size={16} /></Button>
+                    {inv.status !== 'Pagada' && (
+                      <Button variant="ghost" size="icon" title="Registrar Ingreso" onClick={() => onRegisterPayment(inv)}><Icon name="TrendingUp" size={16} /></Button>
+                    )}
+                    <Button variant="ghost" size="icon" title="Enviar Factura" onClick={() => onSend(inv)}><Icon name="Send" size={16} /></Button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+export default ARTable;
