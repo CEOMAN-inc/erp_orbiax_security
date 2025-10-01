@@ -3,13 +3,12 @@ import Input from 'components/ui/Input';
 import Select from 'components/ui/Select';
 import Button from 'components/ui/Button';
 
-const GeneralLedgerFilters = ({ filters, onFilterChange }) => {
+const GeneralLedgerFilters = ({ filters, onFilterChange, onExport }) => {
   
   const handleInputChange = (key, value) => {
     onFilterChange(prev => ({ ...prev, [key]: value }));
   };
   
-  // En una app real, estas opciones vendrían de la API (Plan de Cuentas)
   const accountOptions = [
     { value: '', label: 'Todas las cuentas' },
     { value: '1105 - Caja', label: '1105 - Caja' },
@@ -20,9 +19,16 @@ const GeneralLedgerFilters = ({ filters, onFilterChange }) => {
     { value: '6205 - Compra de Mercancía', label: '6205 - Compra de Mercancía' },
   ];
 
+  const statusOptions = [
+    { value: '', label: 'Todos los estados' },
+    { value: 'Contabilizado', label: 'Contabilizado' },
+    { value: 'Borrador', label: 'Borrador' },
+    { value: 'Anulado', label: 'Anulado' },
+  ];
+
   return (
     <div className="bg-card border border-border rounded-lg p-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 items-end">
         <Input
           label="Desde"
           type="date"
@@ -40,17 +46,22 @@ const GeneralLedgerFilters = ({ filters, onFilterChange }) => {
           options={accountOptions}
           value={filters.account}
           onChange={(value) => handleInputChange('account', value)}
+          searchable
+        />
+        <Select
+          label="Estado"
+          options={statusOptions}
+          value={filters.status}
+          onChange={(value) => handleInputChange('status', value)}
         />
         <Input
           label="Descripción"
           type="text"
-          placeholder="Buscar por descripción..."
+          placeholder="Buscar..."
           value={filters.description}
           onChange={(e) => handleInputChange('description', e.target.value)}
         />
-        <div className="flex items-end">
-          <Button variant="outline" fullWidth>Aplicar Filtros</Button>
-        </div>
+        <Button variant="outline" onClick={onExport} iconName="Download">Exportar</Button>
       </div>
     </div>
   );

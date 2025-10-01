@@ -2,63 +2,54 @@ import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Icon from '../AppIcon';
 
-const Breadcrumb = ({ customBreadcrumbs = null }) => {
+const Breadcrumb = ({ items = null }) => { // El prop ahora es 'items'
   const location = useLocation();
   const navigate = useNavigate();
 
-  const routeMap = {
-    '/dashboard': { label: 'Dashboard', icon: 'LayoutDashboard' },
-    '/personnel-management': { label: 'Personnel Management', icon: 'UserCheck', parent: 'Personnel Operations' },
-    '/roster-calendar': { label: 'Roster Calendar', icon: 'Calendar', parent: 'Personnel Operations' },
-    '/service-orders': { label: 'Service Orders', icon: 'ClipboardList', parent: 'Field Operations' },
-    '/incident-reporting': { label: 'Incident Reporting', icon: 'AlertTriangle', parent: 'Field Operations' },
-    '/asset-management': { label: 'Asset Management', icon: 'Boxes', parent: 'Resource Management' }
-  };
-
-  const generateBreadcrumbs = () => {
-    if (customBreadcrumbs) {
-      return customBreadcrumbs;
-    }
-
-    const pathSegments = location?.pathname?.split('/')?.filter(Boolean);
+  // Función para generar breadcrumbs dinámicos si no se proveen 'items'
+  const generateDynamicBreadcrumbs = () => {
+    const routeMap = {
+      '/dashboard': { label: 'Dashboard', icon: 'LayoutDashboard' },
+      '/personnel-management': { label: 'Gestión de Personal', icon: 'UserCheck', parent: 'Operaciones de Personal' },
+      '/roster-calendar': { label: 'Calendario de Turnos', icon: 'Calendar', parent: 'Operaciones de Personal' },
+      '/service-orders': { label: 'Órdenes de Servicio', icon: 'ClipboardList', parent: 'Operaciones de Campo' },
+      '/incident-reporting': { label: 'Reporte de Incidentes', icon: 'AlertTriangle', parent: 'Operaciones de Campo' },
+      '/asset-management': { label: 'Gestión de Activos', icon: 'Boxes', parent: 'Gestión de Recursos' },
+      '/system-configuration': { label: 'Configuración', icon: 'Settings' }
+    };
+    
     const breadcrumbs = [];
 
-    // Always start with Dashboard if not on dashboard
-    if (location?.pathname !== '/dashboard') {
-      breadcrumbs?.push({
+    // Siempre empezar con Dashboard si no estamos en él
+    if (location.pathname !== '/dashboard' && location.pathname !== '/') {
+      breadcrumbs.push({
         label: 'Dashboard',
         path: '/dashboard',
         icon: 'LayoutDashboard'
       });
     }
 
-    // Add current route
-    const currentRoute = routeMap?.[location?.pathname];
+    const currentRoute = routeMap[location.pathname];
     if (currentRoute) {
-      // Add parent section if exists
-      if (currentRoute?.parent && location?.pathname !== '/dashboard') {
-        breadcrumbs?.push({
-          label: currentRoute?.parent,
-          path: null, // Parent sections don't have direct paths
+      if (currentRoute.parent) {
+        breadcrumbs.push({
+          label: currentRoute.parent,
+          path: null, // Los padres no son navegables
           icon: null
         });
       }
-
-      // Add current page
-      breadcrumbs?.push({
-        label: currentRoute?.label,
-        path: location?.pathname,
-        icon: currentRoute?.icon,
-        current: true
-      });
+      breadcrumbs.push({ ...currentRoute, path: location.pathname, current: true });
+    } else if (location.pathname === '/dashboard' || location.pathname === '/') {
+        breadcrumbs.push({ label: 'Dashboard', path: '/dashboard', icon: 'LayoutDashboard', current: true });
     }
 
     return breadcrumbs;
   };
 
-  const breadcrumbs = generateBreadcrumbs();
+  // Decide qué breadcrumbs usar: los personalizados o los dinámicos
+  const breadcrumbs = items ? items : generateDynamicBreadcrumbs();
 
-  if (breadcrumbs?.length <= 1) {
+  if (!breadcrumbs || breadcrumbs.length === 0 || (breadcrumbs.length === 1 && breadcrumbs[0].current)) {
     return null;
   }
 
@@ -71,27 +62,27 @@ const Breadcrumb = ({ customBreadcrumbs = null }) => {
   return (
     <nav className="flex items-center space-x-2 text-sm text-muted-foreground mb-6" aria-label="Breadcrumb">
       <ol className="flex items-center space-x-2">
-        {breadcrumbs?.map((crumb, index) => (
-          <li key={index} className="flex items-center space-x-2">
+        {breadcrumbs.map((crumb, index) => (
+          <li key={crumb.path || index} className="flex items-center space-x-2">
             {index > 0 && (
               <Icon name="ChevronRight" size={16} className="text-muted-foreground" />
             )}
             
-            {crumb?.current ? (
+            {crumb.current ? (
               <span className="flex items-center space-x-2 text-foreground font-medium">
-                {crumb?.icon && <Icon name={crumb?.icon} size={16} />}
-                <span>{crumb?.label}</span>
+                {crumb.icon && <Icon name={crumb.icon} size={16} />}
+                <span>{crumb.label}</span>
               </span>
             ) : (
               <button
-                onClick={() => handleBreadcrumbClick(crumb?.path)}
+                onClick={() => handleBreadcrumbClick(crumb.path)}
                 className={`flex items-center space-x-2 transition-colors hover:text-foreground ${
-                  crumb?.path ? 'cursor-pointer' : 'cursor-default'
+                  crumb.path ? 'cursor-pointer' : 'cursor-default'
                 }`}
-                disabled={!crumb?.path}
+                disabled={!crumb.path}
               >
-                {crumb?.icon && <Icon name={crumb?.icon} size={16} />}
-                <span>{crumb?.label}</span>
+                {crumb.icon && <Icon name={crumb.icon} size={16} />}
+                <span>{crumb.label}</span>
               </button>
             )}
           </li>
