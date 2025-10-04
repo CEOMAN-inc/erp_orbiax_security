@@ -16,17 +16,19 @@ const Sidebar = ({ isCollapsed = false, onToggle }) => {
       path: '/dashboard',
       type: 'single'
     },
+    // --- SECCIÓN DE GESTIÓN HUMANA ACTUALIZADA ---
     {
-      id: 'gestion-personal',
-      label: 'Gestión de Personal',
+      id: 'gestion-humana',
+      label: 'Recursos Humanos',
       icon: 'Users',
       type: 'group',
       items: [
-        { id: 'roster-calendar', label: 'Horarios y Turnos', icon: 'Calendar', path: '/roster-calendar' },
-        { id: 'asistencia', label: 'Registro de Asistencia', icon: 'ClipboardCheck', path: '/attendance' },
-        { id: 'ausencias', label: 'Vacaciones y Permisos', icon: 'Plane', path: '/leaves' },
-        { id: 'certificaciones', label: 'Certificaciones', icon: 'Award', path: '/certifications' },
-        { id: 'dotacion', label: 'Gestión de Dotación', icon: 'Shirt', path: '/endowments' }
+        { id: 'employee-admin', label: 'Administración de Personal', icon: 'UserCog', path: '/personnel-management' },
+        { id: 'payroll', label: 'Gestión de Nóminas', icon: 'Calculator', path: '/payroll' },
+        { id: 'time-attendance', label: 'Tiempos y Asistencias', icon: 'Clock', path: '/time-attendance' },
+        { id: 'benefits', label: 'Administración de Beneficios', icon: 'Gift', path: '/benefits' },
+        { id: 'recruitment', label: 'Reclutamiento', icon: 'UserPlus', path: '/recruitment' },
+        { id: 'performance', label: 'Gestión del Desempeño', icon: 'TrendingUp', path: '/performance' }
       ]
     },
     {
@@ -36,9 +38,7 @@ const Sidebar = ({ isCollapsed = false, onToggle }) => {
       type: 'group',
       items: [
         { id: 'service-orders', label: 'Órdenes de Servicio', icon: 'ClipboardList', path: '/service-orders' },
-        { id: 'asignar-personal', label: 'Asignar Personal', icon: 'UserPlus', path: '/assign-personnel' },
-        { id: 'reporte-cumplimiento', label: 'Reportes de Cumplimiento', icon: 'BarChart2', path: '/compliance-reports' },
-        { id: 'asignar-recursos', label: 'Asignar Recursos Operativos', icon: 'Truck', path: '/assign-resources' }
+        { id: 'roster-calendar', label: 'Horarios y Turnos', icon: 'Calendar', path: '/roster-calendar' },
       ]
     },
     {
@@ -48,9 +48,7 @@ const Sidebar = ({ isCollapsed = false, onToggle }) => {
       type: 'group',
       items: [
         { id: 'incident-reporting', label: 'Alertas e Incidentes', icon: 'AlertTriangle', path: '/incident-reporting' },
-        { id: 'estado-servicios', label: 'Tablero de Estados', icon: 'Server', path: '/services-status' },
         { id: 'asset-management', label: 'Supervisión de Activos', icon: 'Package', path: '/asset-management' },
-        { id: 'inspecciones', label: 'Inspecciones y Mantenimiento', icon: 'Wrench', path: '/inspections' }
       ]
     },
      {
@@ -61,12 +59,9 @@ const Sidebar = ({ isCollapsed = false, onToggle }) => {
       items: [
         { id: 'gestion-contratos', label: 'Gestión de Contratos', icon: 'FilePlus', path: '/contracts' },
         { id: 'seguimiento-pagos', label: 'Seguimiento de Pagos', icon: 'DollarSign', path: '/payments' },
-        { id: 'reportes-cartera', label: 'Reportes de Cartera', icon: 'PieChart', path: '/reports/portfolio' },
-        { id: 'renovaciones', label: 'Renovaciones', icon: 'RefreshCw', path: '/contracts/renewals' }
       ]
     },
     {
-      // --- SECCIÓN DE CONTABILIDAD ACTUALIZADA ---
       id: 'contabilidad-finanzas',
       label: 'Contabilidad y Finanzas',
       icon: 'Landmark',
@@ -79,16 +74,6 @@ const Sidebar = ({ isCollapsed = false, onToggle }) => {
         { id: 'fixed-assets', label: 'Activos Fijos', icon: 'Building', path: '/fixed-assets' },
         { id: 'budgets', label: 'Presupuestos', icon: 'Target', path: '/budgets' },
         { id: 'financial-reports', label: 'Informes Financieros', icon: 'PieChart', path: '/financial-reports' }
-      ]
-    },
-    {
-      id: 'crm-gestion-comercial',
-      label: 'CRM y Gestión Comercial',
-      icon: 'Briefcase',
-      type: 'group',
-      items: [
-        { id: 'clientes-prospectos', label: 'Clientes y Prospectos', icon: 'Contact', path: '/clients' },
-        { id: 'comunicaciones', label: 'Comunicaciones', icon: 'MessageSquare', path: '/communications' }
       ]
     },
     {
@@ -112,10 +97,13 @@ const Sidebar = ({ isCollapsed = false, onToggle }) => {
 
   useEffect(() => {
     const currentSection = navigationSections.find(section =>
-      section.type === 'group' && section.items.some(item => item.path === location.pathname)
+      section.type === 'group' && section.items.some(item => location.pathname.startsWith(item.path))
     );
     if (currentSection) {
       setActiveSection(currentSection.id);
+    } else {
+        const singleSection = navigationSections.find(section => section.path === location.pathname);
+        if (singleSection) setActiveSection(singleSection.id);
     }
   }, [location.pathname, navigationSections]);
 
@@ -134,66 +122,62 @@ const Sidebar = ({ isCollapsed = false, onToggle }) => {
   };
 
   const isActiveRoute = (path) => {
-    return location?.pathname === path;
-  };
-
-  const isActiveSectionRoute = (items) => {
-    return items?.some(item => location?.pathname === item?.path);
+    return location.pathname.startsWith(path);
   };
 
   const renderNavigationItem = (item, isSubItem = false) => {
-    const isActive = isActiveRoute(item?.path);
+    const isActive = isActiveRoute(item.path);
     
     return (
       <button
-        key={item?.id}
-        onClick={() => handleNavigation(item?.path)}
+        key={item.id}
+        onClick={() => handleNavigation(item.path)}
         className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-150 group ${
           isActive
-            ? 'bg-primary text-primary-foreground shadow-command'
+            ? 'bg-primary text-primary-foreground shadow-sm'
             : 'text-muted-foreground hover:text-foreground hover:bg-muted'
         } ${isSubItem ? 'ml-6' : ''} ${isCollapsed ? 'justify-center px-2' : ''}`}
-        title={isCollapsed ? item?.label : ''}
+        title={isCollapsed ? item.label : ''}
       >
         <Icon 
-          name={item?.icon} 
+          name={item.icon} 
           size={20} 
           className={`flex-shrink-0 ${isActive ? 'text-primary-foreground' : ''}`} 
         />
         {!isCollapsed && (
-          <span className="truncate">{item?.label}</span>
+          <span className="truncate">{item.label}</span>
         )}
       </button>
     );
   };
 
   const renderNavigationSection = (section) => {
-    if (section?.type === 'single') {
+    if (section.type === 'single') {
       return renderNavigationItem(section);
     }
 
     const isExpanded = activeSection === section.id;
-    const hasActiveChild = isActiveSectionRoute(section?.items);
+    const hasActiveChild = section.items.some(item => isActiveRoute(item.path));
 
     return (
-      <div key={section?.id} className="space-y-1">
+      <div key={section.id} className="space-y-1">
         <button
-          onClick={() => toggleSection(section?.id)}
+          onClick={() => toggleSection(section.id)}
           className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-150 group ${
-            hasActiveChild
+            hasActiveChild && !isExpanded
               ? 'bg-muted text-foreground'
               : 'text-muted-foreground hover:text-foreground hover:bg-muted'
           } ${isCollapsed ? 'justify-center px-2' : ''}`}
-          title={isCollapsed ? section?.label : ''}
+          title={isCollapsed ? section.label : ''}
         >
           <Icon 
-            name={section?.icon} 
+            name={section.icon} 
             size={20} 
             className="flex-shrink-0" 
           />
           {!isCollapsed && (
             <>
-              <span className="flex-1 text-left truncate">{section?.label}</span>
+              <span className="flex-1 text-left truncate">{section.label}</span>
               <Icon 
                 name="ChevronDown" 
                 size={16} 
@@ -205,13 +189,8 @@ const Sidebar = ({ isCollapsed = false, onToggle }) => {
           )}
         </button>
         {!isCollapsed && isExpanded && (
-          <div className="space-y-1 progressive-disclosure">
-            {section?.items?.map(item => renderNavigationItem(item, true))}
-          </div>
-        )}
-        {isCollapsed && (
-          <div className="space-y-1">
-            {section?.items?.map(item => renderNavigationItem(item))}
+          <div className="space-y-1 pt-1">
+            {section.items.map(item => renderNavigationItem(item, true))}
           </div>
         )}
       </div>
@@ -219,86 +198,32 @@ const Sidebar = ({ isCollapsed = false, onToggle }) => {
   };
 
   return (
-    <>
-      <aside className={`fixed left-0 top-0 h-full bg-card border-r border-border z-40 transition-all duration-300 ${
-        isCollapsed ? 'w-16' : 'w-72'
-      }`}>
+    <aside className={`fixed left-0 top-0 h-full bg-card border-r border-border z-40 transition-all duration-300 ${isCollapsed ? 'w-20' : 'w-72'}`}>
         <div className="flex flex-col h-full">
-          <div className={`flex items-center px-6 py-4 border-b border-border ${
-            isCollapsed ? 'px-4 justify-center' : ''
-          }`}>
-            {isCollapsed ? (
-              <div className="w-8 h-8 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
-                <Icon name="Shield" size={20} className="text-white" />
-              </div>
-            ) : (
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
-                  <Icon name="Shield" size={24} className="text-white" />
+            <div className={`flex items-center h-16 px-6 border-b border-border ${isCollapsed ? 'px-4 justify-center' : ''}`}>
+                <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
+                        <Icon name="Shield" size={24} className="text-white" />
+                    </div>
+                    {!isCollapsed && (
+                        <div>
+                            <h1 className="text-lg font-bold text-foreground">Orbiax</h1>
+                            <p className="text-xs text-muted-foreground">Security Management</p>
+                        </div>
+                    )}
                 </div>
-                <div>
-                  <h1 className="text-lg font-bold text-foreground">Orbiax</h1>
-                  <p className="text-xs text-muted-foreground">Security Management</p>
-                </div>
-              </div>
-            )}
-          </div>
-          <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto custom-scrollbar">
-            {navigationSections?.map(section => renderNavigationSection(section))}
-          </nav>
-          <div className={`p-4 border-t border-border ${isCollapsed ? 'px-2' : ''}`}>
-            <Button
-              variant="ghost"
-              size={isCollapsed ? "icon" : "default"}
-              onClick={onToggle}
-              className={`w-full ${isCollapsed ? 'justify-center' : 'justify-start'}`}
-              title={isCollapsed ? 'Expandir' : 'Colapsar'}
-            >
-              <Icon 
-                name={isCollapsed ? "ChevronRight" : "ChevronLeft"} 
-                size={20} 
-              />
-              {!isCollapsed && <span className="ml-2">Cerrar Menú</span>}
-            </Button>
-          </div>
+            </div>
+            <nav className="flex-1 px-4 py-4 space-y-2 overflow-y-auto custom-scrollbar">
+                {navigationSections.map(section => renderNavigationSection(section))}
+            </nav>
+            <div className={`p-4 border-t border-border ${isCollapsed ? 'px-2' : ''}`}>
+                <Button variant="ghost" size={isCollapsed ? "icon" : "default"} onClick={onToggle} className="w-full justify-center">
+                    <Icon name={isCollapsed ? "ChevronsRight" : "ChevronsLeft"} size={20} />
+                    {!isCollapsed && <span className="ml-2">Cerrar Menú</span>}
+                </Button>
+            </div>
         </div>
-      </aside>
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-card border-t border-border z-40">
-        <div className="flex items-center justify-around py-2">
-          {navigationSections?.map(section => {
-            if (section?.type === 'single') {
-              const isActive = isActiveRoute(section?.path);
-              return (
-                <button
-                  key={section?.id}
-                  onClick={() => handleNavigation(section?.path)}
-                  className={`flex flex-col items-center space-y-1 px-3 py-2 rounded-lg transition-colors ${
-                    isActive ? 'text-primary' : 'text-muted-foreground'
-                  }`}
-                >
-                  <Icon name={section?.icon} size={20} />
-                  <span className="text-xs font-medium">{section?.label}</span>
-                </button>
-              );
-            }
-            const primaryItem = section?.items?.[0];
-            const isActive = isActiveSectionRoute(section?.items);
-            return (
-              <button
-                key={section?.id}
-                onClick={() => handleNavigation(primaryItem?.path)}
-                className={`flex flex-col items-center space-y-1 px-3 py-2 rounded-lg transition-colors ${
-                  isActive ? 'text-primary' : 'text-muted-foreground'
-                }`}
-              >
-                <Icon name={section?.icon} size={20} />
-                <span className="text-xs font-medium">{section?.label?.split(' ')?.[0]}</span>
-              </button>
-            );
-          })}
-        </div>
-      </nav>
-    </>
+    </aside>
   );
 };
 
